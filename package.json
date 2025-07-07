@@ -1,0 +1,21 @@
+{
+  "name": "licitacao360",
+  "version": "0.1.0",
+  "description": "Licitação 360 - Sistema de processamento de PDFs para licitações",
+  "scripts": {
+    "ng": "cd angular && ng",
+    "start": "cd angular && ng serve --port 1420",
+    "build": "cd angular && ng build",
+    "watch": "cd angular && ng build --watch --configuration development",
+    "tauri": "cd src-tauri && tauri",
+    "tauri-dev": "cd src-tauri && tauri dev",
+    "tauri-build": "cd src-tauri && tauri build",
+    "dev": "cd src-tauri && tauri dev",
+    "build-all": "cd angular && npm run build && cd ../src-tauri && tauri build"
+  },
+  "private": true,
+  "workspaces": [
+    "angular",
+    "src-tauri"
+  ]
+} 
