@@ -1,0 +1,94 @@
+<header class="app-header">
+  <div class="header-content">
+    <!-- Left Section: Page Info -->
+    <div class="header-left">
+      <div class="page-info">
+        <div class="page-title-section">
+          <span class="page-icon">{{ getPageIcon() }}</span>
+          <div class="page-text">
+            <h1 class="page-title">{{ getPageTitle() }}</h1>
+            <p class="page-subtitle">{{ getPageSubtitle() }}</p>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Breadcrumbs -->
+      <nav class="breadcrumbs" *ngIf="showBreadcrumbs">
+        <ol class="breadcrumb-list">
+          <li class="breadcrumb-item">
+            <span class="breadcrumb-icon">🏠</span>
+            <span>Home</span>
+          </li>
+          <li class="breadcrumb-separator">›</li>
+          <li class="breadcrumb-item active">
+            <span class="breadcrumb-icon">{{ getPageIcon() }}</span>
+            <span>{{ getPageTitle() }}</span>
+          </li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Right Section: Actions & Info -->
+    <div class="header-right">
+      <!-- Dynamic Page Actions -->
+      <div class="quick-actions" *ngIf="headerButtons.length > 0">
+        <app-button
+          *ngFor="let button of headerButtons"
+          [variant]="button.style || 'default'"
+          [icon]="button.icon"
+          [label]="button.label"
+          [tooltip]="button.tooltip || button.label"
+          size="md"
+          (buttonClick)="onButtonClick(button)">
+        </app-button>
+      </div>
+      
+      <!-- Default Actions (when no page-specific buttons) -->
+      <div class="quick-actions" *ngIf="headerButtons.length === 0">
+        <app-button
+          variant="default"
+          icon="🔄"
+          label="Atualizar"
+          tooltip="Atualizar página"
+          size="md"
+          (buttonClick)="onRefresh()">
+        </app-button>
+        
+        <app-button
+          variant="default"
+          icon="📤"
+          label="Exportar"
+          tooltip="Exportar dados"
+          size="md"
+          (buttonClick)="onExport()">
+        </app-button>
+        
+        <app-button
+          variant="default"
+          icon="❓"
+          label="Ajuda"
+          tooltip="Ajuda"
+          size="md"
+          (buttonClick)="onHelp()">
+        </app-button>
+      </div>
+
+      <!-- System Info -->
+      <div class="system-info" *ngIf="showUserInfo">
+        <div class="time-info">
+          <div class="current-time">
+            <span class="time-icon">🕐</span>
+            <span class="time-text">{{ currentTime }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Progress bar (for loading states) -->
+  <div class="header-progress">
+    <div class="progress-bar" [class.active]="false">
+      <div class="progress-fill"></div>
+    </div>
+  </div>
+</header>

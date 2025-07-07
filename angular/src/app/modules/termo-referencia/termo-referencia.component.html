@@ -1,0 +1,253 @@
+<div class="termo-referencia-container">
+  <!-- Sidebar Esquerda - Lista de Tabelas -->
+  <div class="tables-sidebar">    
+    <div class="tables-list">
+      <!-- Estado vazio -->
+      <div class="empty-tables" *ngIf="arquivosImportados.length === 0">
+        <p class="empty-text">Nenhuma tabela carregada</p>
+        <p class="empty-help">Use "Importar" no header para adicionar tabelas</p>
+      </div>
+      
+      <!-- Lista de tabelas -->
+      <div class="table-item" 
+           *ngFor="let arquivo of arquivosImportados"
+           [class.selected]="arquivo.id === arquivoAtualId"
+           (click)="carregarArquivoDoHistorico(arquivo.id)">
+        <div class="table-item-content">
+          <div class="table-item-header">
+            <div class="table-icon">📄</div>
+            <div class="table-info">
+              <h4 class="table-name">{{arquivo.nome}}</h4>
+              <p class="table-details">
+                {{formatarData(arquivo.dataImportacao)}}
+              </p>
+              <p class="table-items">{{arquivo.quantidadeItens}} itens</p>
+            </div>
+            <div class="table-status">
+              <div class="selected-indicator" *ngIf="arquivo.id === arquivoAtualId">
+                ✓
+              </div>
+              <button class="btn-remove" 
+                      (click)="removerArquivoDoHistorico(arquivo.id); $event.stopPropagation()"
+                      title="Remover tabela">
+                🗑️
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <div class="main-content">
+    <div class="content-header">
+      <div class="info-item important">
+        <div class="info-icon">⚠️</div>
+        <div>
+          <p>
+            <strong>Importante!</strong> O índice da tabela deve ser <strong>'item'</strong>, <strong>'catalogo'</strong>, <strong>'descricao'</strong> e <strong>'descricao_detalhada'</strong>.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado de carregamento -->
+    <div class="loading-section" *ngIf="loading">
+      <div class="loading-card card-modern">
+        <div class="loading-content">
+          <div class="spinner"></div>
+          <p class="text-base text-secondary">{{ loadingMessage }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela de dados -->
+    <div class="table-section card-modern" *ngIf="termosReferencia.length && !loading">
+      <div class="table-header">
+        <div class="table-title">
+          <h3 class="text-xl font-semibold text-primary">
+            {{getNomeArquivoAtual()}}
+          </h3>
+          <span class="item-count text-sm text-muted">
+            {{termosReferencia.length}} item(s)
+          </span>
+        </div>
+        
+        <div class="table-actions">
+          <button class="btn-modern btn-accent" 
+                  (click)="exportarExcel()"
+                  title="Exportar para Excel">
+            📗 Exportar
+          </button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="col-item">Item</th>
+              <th class="col-catalogo">Catálogo</th>
+              <th class="col-descricao">Descrição</th>
+              <th class="col-descricao-detalhada">Descrição Detalhada</th>
+              <th class="col-actions">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let termo of termosReferencia; let i = index" 
+                [class.selected]="selectedIndex === i"
+                (click)="selectRow(i)">
+              <td class="col-item">
+                <span class="item-number">{{termo.item}}</span>
+              </td>
+              <td class="col-catalogo">
+                <span class="catalogo-code">{{termo.catalogo}}</span>
+              </td>
+              <td class="col-descricao">
+                <span class="descricao-text">{{termo.descricao}}</span>
+              </td>
+              <td class="col-descricao-detalhada">
+                <div class="descricao-detalhada" 
+                     [title]="termo.descricao_detalhada">
+                  {{termo.descricao_detalhada}}
+                </div>
+              </td>
+              <td class="col-actions">
+                <div class="action-buttons">
+                  <button class="btn-icon btn-edit" 
+                          (click)="editarItem(i); $event.stopPropagation()"
+                          title="Editar item">
+                    ✏️
+                  </button>
+                  <button class="btn-icon btn-delete" 
+                          (click)="removerItem(i); $event.stopPropagation()"
+                          title="Remover item">
+                    🗑️
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="table-footer" *ngIf="termosReferencia.length > 10">
+        <div class="pagination-info">
+          <span class="text-sm text-muted">
+            Mostrando {{termosReferencia.length}} de {{totalItems}} itens
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado vazio -->
+    <div class="empty-state card-modern" *ngIf="!termosReferencia.length && !loading">
+      <div class="empty-content">
+        <div class="empty-icon">📝</div>
+        <h3 class="text-xl font-semibold text-primary mb-2">
+          Nenhum termo de referência carregado
+        </h3>
+        <p class="text-base text-secondary mb-4">
+          Selecione uma tabela da lista ao lado ou importe um novo arquivo Excel/CSV.
+        </p>
+        <div class="empty-actions">
+          <button class="btn-modern btn-primary" 
+                  (click)="abrirTabelaNova()">
+            📗 Criar Modelo
+          </button>
+          <button class="btn-modern btn-secondary" 
+                  (click)="carregarTabela()">
+            📤 Importar Arquivo
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modais (mantidos) -->
+  <input type="file" #fileInput (change)="onFileSelected($event)" accept=".xlsx,.xls,.csv,.ods" class="file-input" [disabled]="loading">
+  
+  <div class="modal-overlay" *ngIf="mostrarDialogoNome" (click)="cancelarImportacao()">
+    <div class="modal-content card-modern" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="text-lg font-semibold text-primary">📝 Nome do Arquivo</h3>
+        <button class="btn-icon btn-close" (click)="cancelarImportacao()">✕</button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="label-modern">Nome personalizado para o arquivo:</label>
+          <input type="text" class="input-modern" [(ngModel)]="nomeArquivoPersonalizado" placeholder="Ex: PE 24/2025 - Material de Limpeza" maxlength="100">
+        </div>
+        
+        <div class="info-item" *ngIf="arquivoSelecionadoParaImportacao">
+          <div class="info-icon">📄</div>
+          <div class="info-content">
+            <p class="text-sm text-secondary">
+              <strong>Arquivo selecionado:</strong> {{arquivoSelecionadoParaImportacao.name}}
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn-modern btn-secondary" (click)="cancelarImportacao()">
+          Cancelar
+        </button>
+        <button class="btn-modern btn-primary" (click)="confirmarImportacao()" [disabled]="!nomeArquivoPersonalizado.trim()">
+          📤 Importar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" *ngIf="editingItem" (click)="cancelarEdicao()">
+    <div class="modal-content card-modern" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="text-lg font-semibold text-primary">✏️ Editar Item</h3>
+        <button class="btn-icon btn-close" (click)="cancelarEdicao()">✕</button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="label-modern">Item</label>
+          <input type="text" 
+                 class="input-modern" 
+                 [(ngModel)]="itemEdicao.item"
+                 placeholder="Número do item">
+        </div>
+        
+        <div class="form-group">
+          <label class="label-modern">Catálogo</label>
+          <input type="text" 
+                 class="input-modern" 
+                 [(ngModel)]="itemEdicao.catalogo"
+                 placeholder="Código do catálogo">
+        </div>
+        
+        <div class="form-group">
+          <label class="label-modern">Descrição</label>
+          <input type="text" 
+                 class="input-modern" 
+                 [(ngModel)]="itemEdicao.descricao"
+                 placeholder="Descrição do item">
+        </div>
+        
+        <div class="form-group">
+          <label class="label-modern">Descrição Detalhada</label>
+          <textarea class="input-modern" [(ngModel)]="itemEdicao.descricao_detalhada" placeholder="Descrição detalhada do item" rows="4"></textarea>
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn-modern btn-secondary" (click)="cancelarEdicao()">
+          Cancelar
+        </button>
+        <button class="btn-modern btn-primary" (click)="salvarEdicao()">
+          💾 Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<button 
+  [class]="getButtonClasses()"
+  [disabled]="disabled || loading"
+  [title]="tooltip"
+  (click)="onClick()">
+  
+  <!-- Loading Spinner -->
+  <span *ngIf="loading" class="btn-spinner">
+    <span class="spinner"></span>
+  </span>
+  
+  <!-- Image Icon -->
+  <span *ngIf="isImageIcon() && !loading" class="btn-icon">
+    <img [src]="icon" [alt]="label || 'Icon'" class="btn-icon-image">
+  </span>
+  
+  <!-- Emoji/Text Icon -->
+  <span *ngIf="isEmojiIcon() && !loading" class="btn-icon">
+    {{ icon }}
+  </span>
+  
+  <!-- Label -->
+  <span *ngIf="label && !iconOnly" class="btn-label">
+    {{ label }}
+  </span>
+  
+  <!-- Content projection for custom content -->
+  <ng-content></ng-content>
+</button>

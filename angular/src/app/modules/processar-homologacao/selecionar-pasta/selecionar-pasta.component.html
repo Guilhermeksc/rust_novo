@@ -1,0 +1,65 @@
+<div class="selecionar-pasta-container">
+  <div class="pasta-header">
+    <label class="pasta-label">
+      <span class="label-icon">📁</span>
+      {{ label }}
+    </label>
+  </div>
+
+  <div class="pasta-content">
+    <!-- Display do caminho atual -->
+    <div class="path-display" [class.no-path]="!getPathExists()">
+      <div class="path-text" [title]="currentPath">
+        {{ getTruncatedPath() }}
+      </div>
+      
+      <div class="path-status" *ngIf="getPathExists()">
+        <span class="status-icon success">✓</span>
+        <span class="status-text">Pasta configurada</span>
+      </div>
+      
+      <div class="path-status" *ngIf="!getPathExists()">
+        <span class="status-icon warning">⚠</span>
+        <span class="status-text">Nenhuma pasta selecionada</span>
+      </div>
+    </div>
+
+    <!-- Botões de ação -->
+    <div class="pasta-actions">
+      <button class="btn-selecionar" 
+              (click)="selecionarPasta()" 
+              [disabled]="disabled || isSelecting"
+              [class.loading]="isSelecting">
+        <span class="btn-icon" *ngIf="!isSelecting">📂</span>
+        <span class="btn-icon spinner" *ngIf="isSelecting">🔄</span>
+        <span class="btn-text">
+          {{ isSelecting ? 'Selecionando...' : 'Selecionar Pasta' }}
+        </span>
+      </button>
+
+      <button class="btn-abrir" 
+              (click)="abrirPastaAtual()" 
+              [disabled]="!getPathExists() || isSelecting"
+              title="Abrir pasta no explorador de arquivos"
+              *ngIf="getPathExists()">
+        <span class="btn-icon">🔗</span>
+        <span class="btn-text">Abrir</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Informações adicionais -->
+  <div class="pasta-info" *ngIf="pastaType === 'pdf'">
+    <div class="info-item">
+      <span class="info-icon">📄</span>
+      <span class="info-text">Esta pasta deve conter os arquivos PDF para processamento</span>
+    </div>
+  </div>
+
+  <div class="pasta-info" *ngIf="pastaType === 'output'">
+    <div class="info-item">
+      <span class="info-icon">📊</span>
+      <span class="info-text">Os resultados processados serão salvos nesta pasta</span>
+    </div>
+  </div>
+</div>

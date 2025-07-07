@@ -1,0 +1,154 @@
+<div class="relacao-pdf-container">
+  <!-- Header com controles -->
+  <div class="pdf-header">
+    <div class="header-title">
+      <h3>📄 Arquivos PDF</h3>
+      <span class="file-count">{{ getFilteredFiles().length }} de {{ availablePdfFiles.length }} arquivo(s)</span>
+    </div>
+    
+    <div class="header-controls">
+      <button class="btn-refresh" 
+              (click)="refreshFilesList()" 
+              [disabled]="loadingPdfFiles"
+              title="Atualizar lista">
+        <span class="btn-icon" [class.spinning]="loadingPdfFiles">🔄</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Barra de pesquisa e filtros -->
+  <div class="search-controls">
+    <div class="search-input-container">
+      <input type="text" 
+             class="search-input"
+             placeholder="🔍 Pesquisar arquivos PDF..."
+             [(ngModel)]="searchTerm">
+    </div>
+    
+    <div class="sort-controls">
+      <button class="sort-btn" 
+              [class.active]="sortBy === 'name'"
+              (click)="changeSortBy('name')">
+        Nome
+        <span class="sort-icon" *ngIf="sortBy === 'name'">
+          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+        </span>
+      </button>
+      
+      <button class="sort-btn" 
+              [class.active]="sortBy === 'date'"
+              (click)="changeSortBy('date')">
+        Data
+        <span class="sort-icon" *ngIf="sortBy === 'date'">
+          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+        </span>
+      </button>
+      
+      <button class="sort-btn" 
+              [class.active]="sortBy === 'size'"
+              (click)="changeSortBy('size')">
+        Tamanho
+        <span class="sort-icon" *ngIf="sortBy === 'size'">
+          {{ sortDirection === 'asc' ? '↑' : '↓' }}
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Seleção em massa -->
+  <div class="bulk-actions" *ngIf="availablePdfFiles.length > 0">
+    <div class="select-all">
+      <label class="checkbox-container">
+        <input type="checkbox" 
+               [checked]="selectedFiles.size === getFilteredFiles().length && getFilteredFiles().length > 0"
+               [indeterminate]="selectedFiles.size > 0 && selectedFiles.size < getFilteredFiles().length"
+               (change)="selectAllFiles()">
+        <span class="checkmark"></span>
+        Selecionar todos ({{ getSelectedFilesCount() }})
+      </label>
+    </div>
+    
+    <div class="bulk-buttons" *ngIf="getSelectedFilesCount() > 0">
+      <button class="btn-bulk-process" 
+              (click)="processSelectedFiles()"
+              [disabled]="processing">
+        ⚡ Processar Selecionados ({{ getSelectedFilesCount() }})
+      </button>
+    </div>
+  </div>
+
+  <!-- Lista de arquivos -->
+  <div class="pdf-list">
+    <!-- Estado de carregamento -->
+    <div class="loading-state" *ngIf="loadingPdfFiles">
+      <div class="spinner"></div>
+      <span>Carregando arquivos PDF...</span>
+    </div>
+
+    <!-- Estado vazio -->
+    <div class="empty-state" *ngIf="!loadingPdfFiles && availablePdfFiles.length === 0">
+      <div class="empty-icon">📁</div>
+      <h4>Nenhum arquivo PDF encontrado</h4>
+      <p>Verifique se a pasta PDF contém arquivos ou configure uma pasta diferente.</p>
+    </div>
+
+    <!-- Estado sem resultados de pesquisa -->
+    <div class="no-results-state" *ngIf="!loadingPdfFiles && availablePdfFiles.length > 0 && getFilteredFiles().length === 0">
+      <div class="no-results-icon">🔍</div>
+      <h4>Nenhum arquivo encontrado</h4>
+      <p>Tente ajustar o termo de pesquisa.</p>
+    </div>
+
+    <!-- Lista de arquivos PDF -->
+    <div class="pdf-files-grid" *ngIf="!loadingPdfFiles && getFilteredFiles().length > 0">
+      <div class="pdf-file-card" 
+           *ngFor="let pdfFile of getFilteredFiles(); trackBy: trackByPath"
+           [class.selected]="selectedPdfFile?.file_path === pdfFile.file_path"
+           [class.checked]="isFileSelected(pdfFile)">
+        
+        <!-- Checkbox para seleção múltipla -->
+        <div class="file-checkbox">
+          <label class="checkbox-container">
+            <input type="checkbox" 
+                   [checked]="isFileSelected(pdfFile)"
+                   (change)="toggleFileSelection(pdfFile)">
+            <span class="checkmark"></span>
+          </label>
+        </div>
+
+        <!-- Ícone do arquivo -->
+        <div class="file-icon">
+          📄
+        </div>
+
+        <!-- Informações do arquivo -->
+        <div class="file-info" (click)="selectPdfFile(pdfFile)">
+          <div class="file-name" [title]="pdfFile.file_name">
+            {{ pdfFile.file_name }}
+          </div>
+          
+          <div class="file-details">
+            <span class="file-size">{{ formatFileSize(pdfFile.file_size) }}</span>
+            <span class="file-date">{{ formatDate(pdfFile.modified_timestamp) }}</span>
+          </div>
+        </div>
+
+        <!-- Ações do arquivo -->
+        <div class="file-actions">
+          <button class="action-btn view-btn" 
+                  (click)="viewPdfFile(pdfFile)"
+                  title="Abrir PDF">
+            👁️
+          </button>
+          
+          <button class="action-btn process-btn" 
+                  (click)="processSinglePdfFile(pdfFile)"
+                  [disabled]="processing"
+                  title="Processar este arquivo">
+            ⚡
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

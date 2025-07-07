@@ -1,0 +1,87 @@
+<div class="processar-homologacao-container">
+  <!-- Sidebar Esquerda - Navegador de PDFs -->
+  <div class="pdf-sidebar">
+    <app-relacao-pdf 
+      [pdfDirectory]="pdfDirectory"
+      [outputDirectory]="outputDirectory"
+      [processing]="processing"
+      (fileSelected)="onPdfFileSelected($event)"
+      (processFile)="onProcessPdfFile($event)"
+      (statusMessage)="onStatusMessage($event)">
+    </app-relacao-pdf>
+  </div>
+
+  <!-- Conteúdo Principal -->
+  <div class="main-content">
+    <!-- Header com Configurações de Pastas -->
+    <div class="main-header">
+      <div class="header-title">
+        <h2>📁 Processar Termo de Homologação</h2>
+        <p>Configure as pastas e processe arquivos PDF para extrair dados de licitações</p>
+      </div>
+    </div>
+
+    <!-- Configuração de Pastas -->
+    <div class="directory-config">
+      <div class="config-section">
+        <h3>📂 Configuração de Pastas</h3>
+        <div class="config-grid">
+          <div class="config-item">
+            <app-selecionar-pasta
+              label="Pasta de PDFs"
+              [currentPath]="pdfDirectory"
+              pastaType="pdf"
+              [disabled]="processing || isChangingDirectories"
+              (pathChanged)="onPdfDirectoryChanged($event)"
+              (statusMessage)="onStatusMessage($event)">
+            </app-selecionar-pasta>
+          </div>
+          
+          <div class="config-item">
+            <app-selecionar-pasta
+              label="Pasta de Resultados"
+              [currentPath]="outputDirectory"
+              pastaType="output"
+              [disabled]="processing || isChangingDirectories"
+              (pathChanged)="onOutputDirectoryChanged($event)"
+              (statusMessage)="onStatusMessage($event)">
+            </app-selecionar-pasta>
+          </div>
+        </div>
+        
+        <div class="config-actions">
+          <button class="btn-reset" 
+                  (click)="resetToDefaultDirectories()" 
+                  [disabled]="processing || isChangingDirectories"
+                  title="Restaurar pastas padrão">
+            🔄 Restaurar Padrão
+          </button>
+          <button class="btn-debug" 
+                  (click)="debugAndRepairConfig()" 
+                  [disabled]="processing || isChangingDirectories"
+                  title="Verificar e reparar arquivo de configuração">
+            🔧 Debug Config
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Controles e Abas -->
+    <div class="controls">
+      <div class="button-group">
+        <button (click)="onTabChange('processing')" 
+                [class.active]="activeTab === 'processing'">
+          📁 Processar Arquivos PDF
+        </button>
+        <button (click)="onTabChange('logs')" 
+                [class.active]="activeTab === 'logs'">
+          📝 Logs de Processamento
+        </button>
+        <button (click)="onTabChange('results')" 
+                [class.active]="activeTab === 'results'">
+          📊 Resultados
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

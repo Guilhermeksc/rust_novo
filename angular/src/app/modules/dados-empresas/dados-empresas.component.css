@@ -1,0 +1,395 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .page-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .page-header h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+  }
+  
+  .page-header p {
+    color: #7f8c8d;
+    font-size: 16px;
+  }
+  
+  .section {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #e9ecef;
+  }
+  
+  .section h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #495057;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  }
+  
+  .actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  
+  .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  .btn-secondary {
+    background-color: #6c757d;
+    color: white;
+  }
+  
+  .btn-secondary:hover {
+    background-color: #545b62;
+  }
+  
+  .btn-success {
+    background-color: #28a745;
+    color: white;
+  }
+  
+  .btn-success:hover {
+    background-color: #1e7e34;
+  }
+  
+  .btn-copy {
+    background-color: #17a2b8;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    margin-left: 10px;
+  }
+  
+  .btn-copy:hover {
+    background-color: #117a8b;
+  }
+  
+  .info-cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .info-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    flex: 1;
+    min-width: 150px;
+    text-align: center;
+  }
+  
+  .info-card h3 {
+    color: #495057;
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  
+  .info-card .number {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+    color: #2c3e50;
+  }
+  
+  .info-card .number.success {
+    color: #28a745;
+  }
+  
+  .info-card .number.warning {
+    color: #ffc107;
+  }
+  
+  .empresa-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .empresa-item {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+    transition: all 0.2s;
+  }
+  
+  .empresa-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .empresa-item.verified {
+    border-left: 4px solid #28a745;
+  }
+  
+  .empresa-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .status-icon {
+    font-size: 20px;
+  }
+  
+  .empresa-header h4 {
+    margin: 0;
+    color: #2c3e50;
+    flex: 1;
+  }
+  
+  .empresa-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 10px;
+    margin-top: 15px;
+  }
+  
+  .empresa-details p {
+    margin: 0;
+    font-size: 14px;
+    color: #495057;
+  }
+  
+  .empresa-details strong {
+    color: #2c3e50;
+  }
+  
+  .pdf-info {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .progress-bar {
+    width: 100%;
+    height: 6px;
+    background-color: #e9ecef;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 15px;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background-color: #007bff;
+    animation: indeterminate 2s linear infinite;
+  }
+  
+  @keyframes indeterminate {
+    0% {
+      transform: translateX(-100%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
+  
+  .log-container {
+    max-height: 300px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 15px;
+  }
+  
+  .log-controls {
+    margin-bottom: 15px;
+  }
+  
+  .log-item {
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.4;
+    margin-bottom: 5px;
+    color: #495057;
+  }
+  
+  .log-item.empty {
+    color: #6c757d;
+    font-style: italic;
+    text-align: center;
+  }
+  
+  .instructions {
+    background: #e7f3ff;
+    border-radius: 8px;
+    padding: 20px;
+    margin-top: 20px;
+    border: 1px solid #b8daff;
+  }
+  
+  .instructions h4 {
+    color: #004085;
+    margin-bottom: 15px;
+  }
+  
+  .instructions ol {
+    margin-bottom: 15px;
+  }
+  
+  .instructions li {
+    margin-bottom: 8px;
+    color: #004085;
+  }
+  
+  .instructions p {
+  margin: 0;
+  color: #004085;
+  font-weight: 500;
+}
+
+.tips {
+  margin-top: 20px;
+  padding: 15px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 6px;
+  border: 1px solid #b8daff;
+}
+
+.tips h5 {
+  color: #004085;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.tips ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.tips li {
+  margin-bottom: 5px;
+  color: #004085;
+  font-size: 13px;
+}
+  
+  .empty-state {
+  text-align: center;
+  padding: 30px 20px;
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.empty-state p {
+  margin: 5px 0;
+  color: #6c757d;
+}
+
+.empty-state p:first-child {
+  font-size: 16px;
+  font-weight: 600;
+  color: #495057;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .container {
+    padding: 10px;
+  }
+  
+  .info-cards {
+    flex-direction: column;
+  }
+  
+  .actions {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .empresa-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .empresa-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .btn-copy {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+
+  .empty-state {
+    padding: 20px 15px;
+  }
+}
+  

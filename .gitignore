@@ -1,0 +1,177 @@
+# ======================================
+# .gitignore para Projeto Tauri - Licitação360
+# ======================================
+
+# =============================================================================
+# RUST/TAURI BACKEND (src-tauri/)
+# =============================================================================
+
+# Rust build artifacts
+/src-tauri/target/
+**/*.rs.bk
+*.pdb
+
+# Cargo.lock é normalmente versionado para aplicações, ignorado para bibliotecas
+# Para projeto Tauri, recomenda-se manter o Cargo.lock
+# /src-tauri/Cargo.lock
+
+# Tauri build outputs
+/src-tauri/gen/
+/src-tauri/WixTools/
+
+# =============================================================================
+# ANGULAR FRONTEND (angular/)
+# =============================================================================
+
+# Node.js dependencies
+/angular/node_modules/
+/node_modules/
+
+# Angular build outputs
+/angular/dist/
+/angular/tmp/
+/angular/.angular/
+
+# Angular cache
+/angular/.angular/cache/
+
+# =============================================================================
+# DATA E ARQUIVOS PROCESSADOS
+# =============================================================================
+
+# PDFs de entrada (normalmente grandes e não versionados)
+/data/pdf/
+/pdfs/
+*.pdf
+
+# Arquivos de saída processados (descomente se quiser versionar alguns)
+/data/output/
+/data/teste_output/
+/src-tauri/output/
+
+# Arquivos JSON específicos gerados
+consolidado*.json
+licitacao_*.json
+resumo_geral.json
+
+# Relatórios markdown gerados
+relatorio-termo-homologacao-*.md
+
+# Arquivos temporários do processamento
+temp_*.md
+temp_output.txt
+*.tmp
+*.temp
+
+# =============================================================================
+# SISTEMA E FERRAMENTAS
+# =============================================================================
+
+# Arquivos de sistema Windows
+desktop.ini
+$RECYCLE.BIN/
+Thumbs.db
+
+# Arquivos de sistema macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Arquivos de sistema Linux
+*~
+.nfs*
+
+# =============================================================================
+# IDEs E EDITORES
+# =============================================================================
+
+# Visual Studio Code
+.vscode/
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains IDEs
+.idea/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim/Neovim
+*.swp
+*.swo
+*~
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+
+# =============================================================================
+# LOGS E DEBUG
+# =============================================================================
+
+# Log files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Debug output
+debug_*.txt
+test_*.txt
+
+# =============================================================================
+# CONFIGURAÇÕES E SECRETS
+# =============================================================================
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Local config files
+config.local.*
+
+# =============================================================================
+# FERRAMENTAS DE DESENVOLVIMENTO
+# =============================================================================
+
+# Rust analyzer
+.rust-analyzer/
+
+# Coverage reports
+coverage/
+*.gcda
+*.gcno
+*.info
+lcov.info
+
+# Profiling
+*.prof
+callgrind.out.*
+cachegrind.out.*
+
+# Backup files
+*.bak
+*.backup
+
+# =============================================================================
+# CONFIGURAÇÕES OPCIONAIS
+# =============================================================================
+
+# Se você quiser versionar alguns arquivos de exemplo/teste, descomente:
+# !data/teste_output/exemplo_*.json
+# !data/teste_output/exemplo_*.md
+
+# Se você quiser versionar PDFs específicos de exemplo:
+# !data/pdf/exemplo_*.pdf
+
+# Se você quiser versionar alguma saída específica:
+# !data/output/relatorio_final.md

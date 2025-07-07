@@ -1,0 +1,156 @@
+<div class="container">
+  <div class="page-header">
+    <h1>🏢 Processar SICAF</h1>
+    <p>Extrair e processar dados de SICAF em formato PDF</p>
+  </div>
+
+  <!-- Seção de Seleção de Arquivo JSON -->
+  <div class="section">
+    <h2>📋 Selecionar Licitação</h2>
+    
+    <div *ngIf="jsonFiles.length === 0" class="empty-state">
+      <p>📂 Nenhum arquivo JSON de licitação encontrado</p>
+      <p>Adicione seus arquivos JSON processados na pasta Database/Resultados</p>
+    </div>
+    
+    <div class="form-group">
+      <label for="jsonSelect">Selecione o arquivo JSON da licitação:</label>
+      <select id="jsonSelect" [(ngModel)]="selectedJsonFile" (change)="onJsonFileSelected()" class="form-control">
+        <option value="">{{ jsonFiles.length === 0 ? 'Nenhum arquivo encontrado' : 'Selecione um arquivo...' }}</option>
+        <option *ngFor="let file of jsonFiles" [value]="file.file_path">
+          {{ file.file_name }} ({{ file.propostas_count || 0 }} propostas)
+        </option>
+      </select>
+    </div>
+    
+    <div class="actions">
+      <button type="button" (click)="openResultsFolder()" class="btn btn-primary">
+        📁 Abrir Pasta de Resultados
+      </button>
+      <button type="button" (click)="loadJsonFiles()" class="btn btn-secondary">
+        🔄 Atualizar Lista
+      </button>
+    </div>
+  </div>
+
+  <!-- Seção de Empresas/CNPJs -->
+  <div class="section" *ngIf="sicafData.length > 0">
+    <h2>🏢 Empresas da Licitação</h2>
+    <div class="info-cards">
+      <div class="info-card">
+        <h3>Total de CNPJs</h3>
+        <p class="number">{{ sicafData.length }}</p>
+      </div>
+      <div class="info-card">
+        <h3>SICAF Verificados</h3>
+        <p class="number success">{{ verifiedCount }}</p>
+      </div>
+      <div class="info-card">
+        <h3>Não Verificados</h3>
+        <p class="number warning">{{ notVerifiedCount }}</p>
+      </div>
+    </div>
+
+    <div class="empresa-list">
+      <div class="empresa-item" *ngFor="let empresa of sicafData" [class.verified]="empresa.situacao_cadastro === 'Verificado'">
+        <div class="empresa-info">
+          <div class="empresa-header">
+            <span class="status-icon" [class.verified]="empresa.situacao_cadastro === 'Verificado'">
+              {{ empresa.situacao_cadastro === 'Verificado' ? '✅' : '❌' }}
+            </span>
+            <h4>{{ empresa.empresa }}</h4>
+            <button type="button" (click)="copyToClipboard(empresa.cnpj)" class="btn btn-copy" title="Copiar CNPJ">
+              📋
+            </button>
+          </div>
+          <div class="empresa-details">
+            <p><strong>CNPJ:</strong> {{ empresa.cnpj }}</p>
+            <p *ngIf="empresa.nome_fantasia"><strong>Nome Fantasia:</strong> {{ empresa.nome_fantasia }}</p>
+            <p *ngIf="empresa.endereco"><strong>Endereço:</strong> {{ empresa.endereco }}</p>
+            <p *ngIf="empresa.municipio && empresa.uf"><strong>Localização:</strong> {{ empresa.municipio }}/{{ empresa.uf }}</p>
+            <p *ngIf="empresa.telefone"><strong>Telefone:</strong> {{ empresa.telefone }}</p>
+            <p *ngIf="empresa.email"><strong>Email:</strong> {{ empresa.email }}</p>
+            <p *ngIf="empresa.data_vencimento"><strong>Data Vencimento:</strong> {{ empresa.data_vencimento }}</p>
+            <p *ngIf="empresa.nome_responsavel"><strong>Responsável:</strong> {{ empresa.nome_responsavel }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Seção de Processamento -->
+  <div class="section">
+    <h2>📁 Pasta de PDFs SICAF</h2>
+    <div class="pdf-info">
+      <div class="info-card">
+        <h3>Arquivos PDF</h3>
+        <p class="number">{{ pdfCount }}</p>
+      </div>
+      <div class="info-card" *ngIf="processedCount > 0">
+        <h3>Processados</h3>
+        <p class="number success">{{ processedCount }}</p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="button" (click)="openSicafFolder()" class="btn btn-primary">
+        📂 Abrir Pasta SICAF
+      </button>
+      <button type="button" (click)="refreshAll()" class="btn btn-secondary">
+        🔄 Atualizar
+      </button>
+      <button 
+        type="button" 
+        (click)="processSicafPdfs()" 
+        [disabled]="isProcessing || pdfCount === 0"
+        class="btn btn-success">
+        {{ isProcessing ? '⏳ Processando...' : '⚡ Processar PDFs' }}
+      </button>
+    </div>
+
+    <div class="progress-bar" *ngIf="isProcessing">
+      <div class="progress-fill"></div>
+    </div>
+  </div>
+
+  <!-- Seção de Logs -->
+  <div class="section">
+    <h2>📋 Logs do Sistema</h2>
+    <div class="log-controls">
+      <button type="button" (click)="clearLogs()" class="btn btn-secondary">
+        🗑️ Limpar Logs
+      </button>
+    </div>
+    <div class="log-container">
+      <div class="log-item" *ngFor="let log of logs">
+        {{ log }}
+      </div>
+      <div *ngIf="logs.length === 0" class="log-item empty">
+        Nenhum log disponível
+      </div>
+    </div>
+  </div>
+
+  <!-- Instruções -->
+  <div class="instructions">
+    <h4>📋 Como usar:</h4>
+    <ol>
+      <li><strong>Adicionar Licitações:</strong> Clique em "📁 Abrir Pasta de Resultados" e coloque seus arquivos JSON de licitações processadas na pasta Database/Resultados</li>
+      <li><strong>Selecionar Licitação:</strong> Escolha um arquivo JSON para ver as empresas participantes</li>
+      <li><strong>Adicionar SICAF:</strong> Clique em "📂 Abrir Pasta SICAF" e adicione os PDFs do SICAF na pasta Database/SICAF</li>
+      <li><strong>Processar:</strong> Clique em "⚡ Processar PDFs" para extrair os dados dos PDFs SICAF</li>
+      <li><strong>Verificar:</strong> Acompanhe o status através dos indicadores ✅/❌ e logs do sistema</li>
+      <li><strong>Copiar CNPJs:</strong> Use o botão 📋 para copiar CNPJs e facilitar a busca no SICAF</li>
+    </ol>
+    
+    <div class="tips">
+      <h5>💡 Dicas importantes:</h5>
+      <ul>
+        <li>Consulte apenas o 'Nível 1 - Credenciamento' do SICAF</li>
+        <li>A pasta Database é mantida durante atualizações do programa</li>
+        <li>Organize os arquivos PDF do SICAF com nomes que incluam o CNPJ</li>
+        <li>Use "🔄 Atualizar" após adicionar novos arquivos</li>
+      </ul>
+    </div>
+  </div>
+</div>

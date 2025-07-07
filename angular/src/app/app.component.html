@@ -1,0 +1,41 @@
+<div class="app-container" 
+     [class.sidebar-collapsed]="sidebarCollapsed"
+     [class.sidebar-open]="sidebarOpen">
+  
+  <!-- Mobile Menu Button -->
+  <button class="mobile-menu-btn" (click)="toggleMobileSidebar()">
+    ☰
+  </button>
+
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+
+  <!-- Main Content Area -->
+  <main class="main-content" [class.sidebar-collapsed]="sidebarCollapsed">
+    <!-- Header -->
+    <app-header-content></app-header-content>
+    
+    <!-- Dynamic Component Display -->
+    <div class="content-wrapper">
+      <!-- Termo de Referência -->
+      <app-termo-referencia *ngIf="currentPage === 'termo-referencia'"></app-termo-referencia>
+      
+      <!-- Processar Homologação -->
+      <app-processar-homologacao *ngIf="currentPage === 'processar-homologacao'"></app-processar-homologacao>
+      
+      <!-- Dados das Empresas -->
+      <app-dados-empresas *ngIf="currentPage === 'dados-empresas'"></app-dados-empresas>
+      
+      <!-- Gerar Ata -->
+      <app-gerar-ata *ngIf="currentPage === 'gerar-ata'"></app-gerar-ata>
+      
+      <!-- Índices de Economicidade -->
+      <app-indices-economicidade *ngIf="currentPage === 'indices-economicidade'"></app-indices-economicidade>
+      
+      <!-- Configurações -->
+      <app-configuracoes *ngIf="currentPage === 'configuracoes'"></app-configuracoes>
+    </div>
+  </main>
+</div>
+
+<router-outlet />
